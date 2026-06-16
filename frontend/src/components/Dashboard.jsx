@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import "./Dashboard.css";
 
+const API_URL = import.meta.env.DEV ? "http://localhost:5000" : "https://panchayat-system.onrender.com";
+
+
 // Reusable component for the sleek dark mode list (like "Top Products" in the image)
 const SleekList = ({ title, data, colors }) => (
   <div className="dark-panel">
@@ -85,7 +88,7 @@ export default function Dashboard({ user, onNavigate }) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('https://panchayat-system.onrender.com/api/dashboard/stats');
+        const res = await fetch(`${API_URL}/api/dashboard/stats`);
         if (res.ok) {
           setStats(await res.json());
         }

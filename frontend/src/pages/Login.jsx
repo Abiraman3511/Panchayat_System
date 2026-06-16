@@ -3,6 +3,9 @@ import { useState } from "react";
 import "./Login.css";
 import loginImage from "../assets/login-image.png";
 
+const API_URL = import.meta.env.DEV ? "http://localhost:5000" : "https://panchayat-system.onrender.com";
+
+
 export default function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +36,7 @@ export default function Login({ onLoginSuccess }) {
 
     setLoading(true);
     try {
-      const response = await fetch(`https://panchayat-system.onrender.com/api/auth/send-otp`, {
+      const response = await fetch(`${API_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -68,7 +71,7 @@ export default function Login({ onLoginSuccess }) {
         ? { username, password, confirmPassword, email, phoneNumber: phone, otpCode: otp } 
         : { username, password };
 
-      const response = await fetch(`https://panchayat-system.onrender.com${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

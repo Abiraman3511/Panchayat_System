@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import "./VillageAdministration.css";
 
+const API_URL = import.meta.env.DEV ? "http://localhost:5000" : "https://panchayat-system.onrender.com";
+
+
 export default function VillageAdministration({ user, onNavigate }) {
   const [officials, setOfficials] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,7 +23,7 @@ export default function VillageAdministration({ user, onNavigate }) {
 
   const fetchOfficials = async () => {
     try {
-      const response = await fetch("https://panchayat-system.onrender.com/api/officials");
+      const response = await fetch(`${API_URL}/api/officials`);
       if (response.ok) {
         const data = await response.json();
         setOfficials(data);
@@ -74,8 +77,8 @@ export default function VillageAdministration({ user, onNavigate }) {
     e.preventDefault();
     
     const url = editingId 
-      ? `https://panchayat-system.onrender.com/api/officials/${editingId}`
-      : `https://panchayat-system.onrender.com/api/officials`;
+      ? `${API_URL}/api/officials/${editingId}`
+      : `${API_URL}/api/officials`;
       
     const method = editingId ? "PUT" : "POST";
 
@@ -104,7 +107,7 @@ export default function VillageAdministration({ user, onNavigate }) {
     if (!window.confirm("Are you sure you want to remove this official?")) return;
 
     try {
-      const response = await fetch(`https://panchayat-system.onrender.com/api/officials/${id}`, {
+      const response = await fetch(`${API_URL}/api/officials/${id}`, {
         method: "DELETE",
         headers: {
           "X-Is-Admin": user.isAdmin ? "true" : "false"

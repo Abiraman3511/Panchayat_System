@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import './VillageEmployees.css';
 
+const API_URL = import.meta.env.DEV ? "http://localhost:5000" : "https://panchayat-system.onrender.com";
+
+
 function VillageEmployees({ user, onNavigate }) {
   const [employees, setEmployees] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,7 +23,7 @@ function VillageEmployees({ user, onNavigate }) {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('https://panchayat-system.onrender.com/api/employees');
+      const response = await fetch(`${API_URL}/api/employees`);
       const data = await response.json();
       setEmployees(data);
     } catch (error) {
@@ -57,8 +60,8 @@ function VillageEmployees({ user, onNavigate }) {
     e.preventDefault();
     
     const url = formData.id 
-      ? `https://panchayat-system.onrender.com/api/employees/${formData.id}`
-      : 'https://panchayat-system.onrender.com/api/employees';
+      ? `${API_URL}/api/employees/${formData.id}`
+      : `${API_URL}/api/employees`;
       
     const method = formData.id ? 'PUT' : 'POST';
 
@@ -87,7 +90,7 @@ function VillageEmployees({ user, onNavigate }) {
     if (!window.confirm("Are you sure you want to delete this employee?")) return;
     
     try {
-      const response = await fetch(`https://panchayat-system.onrender.com/api/employees/${id}`, {
+      const response = await fetch(`${API_URL}/api/employees/${id}`, {
         method: 'DELETE',
         headers: {
           'X-Is-Admin': user?.isAdmin ? 'true' : 'false'

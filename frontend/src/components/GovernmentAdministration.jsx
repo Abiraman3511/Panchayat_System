@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import './GovernmentAdministration.css';
 
+const API_URL = import.meta.env.DEV ? "http://localhost:5000" : "https://panchayat-system.onrender.com";
+
+
 function GovernmentAdministration({ user, onNavigate }) {
   const [officials, setOfficials] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +21,7 @@ function GovernmentAdministration({ user, onNavigate }) {
 
   const fetchOfficials = async () => {
     try {
-      const response = await fetch('https://panchayat-system.onrender.com/api/government-officials');
+      const response = await fetch(`${API_URL}/api/government-officials`);
       const data = await response.json();
       setOfficials(data);
     } catch (error) {
@@ -53,8 +56,8 @@ function GovernmentAdministration({ user, onNavigate }) {
     e.preventDefault();
     
     const url = formData.id 
-      ? `https://panchayat-system.onrender.com/api/government-officials/${formData.id}`
-      : 'https://panchayat-system.onrender.com/api/government-officials';
+      ? `${API_URL}/api/government-officials/${formData.id}`
+      : `${API_URL}/api/government-officials`;
       
     const method = formData.id ? 'PUT' : 'POST';
 
@@ -83,7 +86,7 @@ function GovernmentAdministration({ user, onNavigate }) {
     if (!window.confirm("Are you sure you want to delete this official?")) return;
     
     try {
-      const response = await fetch(`https://panchayat-system.onrender.com/api/government-officials/${id}`, {
+      const response = await fetch(`${API_URL}/api/government-officials/${id}`, {
         method: 'DELETE',
         headers: {
           'X-Is-Admin': user?.isAdmin ? 'true' : 'false'
