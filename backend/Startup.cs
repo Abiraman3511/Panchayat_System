@@ -28,7 +28,8 @@ namespace PanchayatApp
             });
 
             // Configure EF Core (PostgreSQL for Prod, SQLite for Local)
-            var pgConnection = Configuration.GetConnectionString("PostgreSQLConnection");
+            var pgConnection = Configuration.GetConnectionString("PostgreSQLConnection") 
+                            ?? Configuration["DATABASE_URL"];
             
             // Render provides URL-style connection strings (postgres://user:pass@host/db), Npgsql needs ADO.NET format
             if (!string.IsNullOrEmpty(pgConnection) && pgConnection.StartsWith("postgres"))
