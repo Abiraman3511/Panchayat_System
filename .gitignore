@@ -1,0 +1,26 @@
+# Frontend (React/Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# Backend (.NET)
+backend/bin/
+backend/obj/
+backend/appsettings.Development.json
+
+# Databases & Uploads
+*.db
+*.sqlite
+*.sqlite3
+backend/PanchayatSystem.db
+backend/PanchayatSystem.db-shm
+backend/PanchayatSystem.db-wal
+users.db
+backend/wwwroot/uploads/
+
+# IDE & OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
