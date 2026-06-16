@@ -3,8 +3,9 @@ using PanchayatApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Bind strictly to http://127.0.0.1:8000 to match frontend
-builder.WebHost.UseUrls("http://127.0.0.1:8000");
+// Allow Render to dynamically assign the port
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Initialize Startup and Configure Services
 var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "people");
