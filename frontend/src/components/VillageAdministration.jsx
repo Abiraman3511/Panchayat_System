@@ -20,7 +20,7 @@ export default function VillageAdministration({ user, onNavigate }) {
 
   const fetchOfficials = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/officials");
+      const response = await fetch("https://panchayat-system.onrender.com/api/officials");
       if (response.ok) {
         const data = await response.json();
         setOfficials(data);
@@ -74,8 +74,8 @@ export default function VillageAdministration({ user, onNavigate }) {
     e.preventDefault();
     
     const url = editingId 
-      ? `http://127.0.0.1:8000/api/officials/${editingId}`
-      : `http://127.0.0.1:8000/api/officials`;
+      ? `https://panchayat-system.onrender.com/api/officials/${editingId}`
+      : `https://panchayat-system.onrender.com/api/officials`;
       
     const method = editingId ? "PUT" : "POST";
 
@@ -104,7 +104,7 @@ export default function VillageAdministration({ user, onNavigate }) {
     if (!window.confirm("Are you sure you want to remove this official?")) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/officials/${id}`, {
+      const response = await fetch(`https://panchayat-system.onrender.com/api/officials/${id}`, {
         method: "DELETE",
         headers: {
           "X-Is-Admin": user.isAdmin ? "true" : "false"

@@ -20,7 +20,7 @@ function VillageEmployees({ user, onNavigate }) {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/employees');
+      const response = await fetch('https://panchayat-system.onrender.com/api/employees');
       const data = await response.json();
       setEmployees(data);
     } catch (error) {
@@ -57,8 +57,8 @@ function VillageEmployees({ user, onNavigate }) {
     e.preventDefault();
     
     const url = formData.id 
-      ? `http://127.0.0.1:8000/api/employees/${formData.id}`
-      : 'http://127.0.0.1:8000/api/employees';
+      ? `https://panchayat-system.onrender.com/api/employees/${formData.id}`
+      : 'https://panchayat-system.onrender.com/api/employees';
       
     const method = formData.id ? 'PUT' : 'POST';
 
@@ -87,7 +87,7 @@ function VillageEmployees({ user, onNavigate }) {
     if (!window.confirm("Are you sure you want to delete this employee?")) return;
     
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/employees/${id}`, {
+      const response = await fetch(`https://panchayat-system.onrender.com/api/employees/${id}`, {
         method: 'DELETE',
         headers: {
           'X-Is-Admin': user?.isAdmin ? 'true' : 'false'

@@ -33,7 +33,7 @@ export default function Login({ onLoginSuccess }) {
 
     setLoading(true);
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/auth/send-otp`, {
+      const response = await fetch(`https://panchayat-system.onrender.com/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -68,7 +68,7 @@ export default function Login({ onLoginSuccess }) {
         ? { username, password, confirmPassword, email, phoneNumber: phone, otpCode: otp } 
         : { username, password };
 
-      const response = await fetch(`http://127.0.0.1:8000${endpoint}`, {
+      const response = await fetch(`https://panchayat-system.onrender.com${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

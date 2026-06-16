@@ -53,7 +53,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
 
   const fetchStreets = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/streets');
+      const response = await fetch('https://panchayat-system.onrender.com/api/streets');
       if (response.ok) {
         setStreets(await response.json());
       }
@@ -64,7 +64,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
 
   const fetchFamilies = async (streetId) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/streets/${streetId}/families`);
+      const response = await fetch(`https://panchayat-system.onrender.com/api/streets/${streetId}/families`);
       if (response.ok) {
         setFamilies(await response.json());
       }
@@ -76,7 +76,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
   const fetchPeopleInFamily = async (familyId) => {
     try {
       const headers = isAdmin ? { 'X-Is-Admin': 'true' } : {};
-      const response = await fetch(`http://127.0.0.1:8000/api/families/${familyId}/people`, { headers });
+      const response = await fetch(`https://panchayat-system.onrender.com/api/families/${familyId}/people`, { headers });
       if (response.ok) {
         setPeople(await response.json());
       }
@@ -95,7 +95,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
     setIsSearching(true);
     setLevel('SEARCH_RESULTS');
     
-    let url = new URL('http://127.0.0.1:8000/api/people/search');
+    let url = new URL('https://panchayat-system.onrender.com/api/people/search');
     url.searchParams.append('query', searchQuery);
 
     try {
@@ -114,7 +114,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
   const handleAddStreet = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/streets', {
+      const res = await fetch('https://panchayat-system.onrender.com/api/streets', {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ name: newStreetName })
@@ -143,7 +143,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
       message: `Are you sure you want to save these changes to "${editStreetName}"?`,
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/api/streets/${editingStreetId}`, {
+          const res = await fetch(`https://panchayat-system.onrender.com/api/streets/${editingStreetId}`, {
             method: 'PUT',
             headers: getAuthHeaders(),
             body: JSON.stringify({ id: editingStreetId, name: editStreetName })
@@ -168,7 +168,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
       message: `Are you sure you want to delete "${street.name}"?`,
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/api/streets/${street.id}`, {
+          const res = await fetch(`https://panchayat-system.onrender.com/api/streets/${street.id}`, {
             method: 'DELETE',
             headers: getAuthHeaders()
           });
@@ -189,7 +189,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
   const handleAddFamily = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/streets/${selectedStreet.id}/families`, {
+      const res = await fetch(`https://panchayat-system.onrender.com/api/streets/${selectedStreet.id}/families`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newFamily)
@@ -223,7 +223,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
       message: `Are you sure you want to save changes to ${editFamily.familyHeadName}'s Family?`,
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/api/families/${editingFamilyId}`, {
+          const res = await fetch(`https://panchayat-system.onrender.com/api/families/${editingFamilyId}`, {
             method: 'PUT',
             headers: getAuthHeaders(),
             body: JSON.stringify({ id: editingFamilyId, ...editFamily })
@@ -248,7 +248,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
       message: `Are you sure you want to delete ${family.familyHeadName}'s Family?`,
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/api/families/${family.id}`, {
+          const res = await fetch(`https://panchayat-system.onrender.com/api/families/${family.id}`, {
             method: 'DELETE',
             headers: getAuthHeaders()
           });
@@ -270,7 +270,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
   const handleAddPerson = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/families/${selectedFamily.id}/people`, {
+      const res = await fetch(`https://panchayat-system.onrender.com/api/families/${selectedFamily.id}/people`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newPerson)
@@ -298,7 +298,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
       message: 'Are you sure you want to save these changes?',
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/api/people/${selectedPersonDetail.id}`, {
+          const res = await fetch(`https://panchayat-system.onrender.com/api/people/${selectedPersonDetail.id}`, {
             method: 'PUT',
             headers: getAuthHeaders(),
             body: JSON.stringify(selectedPersonDetail)
@@ -323,7 +323,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
       message: 'Are you sure you want to delete this person?',
       onConfirm: async () => {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/api/people/${selectedPersonDetail.id}`, {
+          const res = await fetch(`https://panchayat-system.onrender.com/api/people/${selectedPersonDetail.id}`, {
             method: 'DELETE',
             headers: getAuthHeaders()
           });
@@ -356,7 +356,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
     formData.append("file", file);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/people/${selectedPersonDetail.id}/upload-photo`, {
+      const res = await fetch(`https://panchayat-system.onrender.com/api/people/${selectedPersonDetail.id}/upload-photo`, {
         method: "POST",
         headers: {
           "X-Is-Admin": "true"
@@ -679,7 +679,7 @@ const PeopleDirectory = ({ user, onNavigate }) => {
             <div className="profile-header" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', paddingBottom: '10px' }}>
               <div className="profile-photo" style={{ justifySelf: 'start', width: '60px', height: '60px', borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', position: 'relative' }}>
                 {selectedPersonDetail.photoPath ? (
-                  <img src={`http://127.0.0.1:8000${selectedPersonDetail.photoPath}`} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={`https://panchayat-system.onrender.com${selectedPersonDetail.photoPath}`} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <User size={35} color="var(--primary)" />
                 )}

@@ -85,7 +85,7 @@ export default function Dashboard({ user, onNavigate }) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/dashboard/stats');
+        const res = await fetch('https://panchayat-system.onrender.com/api/dashboard/stats');
         if (res.ok) {
           setStats(await res.json());
         }

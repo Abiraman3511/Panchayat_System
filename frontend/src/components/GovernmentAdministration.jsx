@@ -18,7 +18,7 @@ function GovernmentAdministration({ user, onNavigate }) {
 
   const fetchOfficials = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/government-officials');
+      const response = await fetch('https://panchayat-system.onrender.com/api/government-officials');
       const data = await response.json();
       setOfficials(data);
     } catch (error) {
@@ -53,8 +53,8 @@ function GovernmentAdministration({ user, onNavigate }) {
     e.preventDefault();
     
     const url = formData.id 
-      ? `http://127.0.0.1:8000/api/government-officials/${formData.id}`
-      : 'http://127.0.0.1:8000/api/government-officials';
+      ? `https://panchayat-system.onrender.com/api/government-officials/${formData.id}`
+      : 'https://panchayat-system.onrender.com/api/government-officials';
       
     const method = formData.id ? 'PUT' : 'POST';
 
@@ -83,7 +83,7 @@ function GovernmentAdministration({ user, onNavigate }) {
     if (!window.confirm("Are you sure you want to delete this official?")) return;
     
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/government-officials/${id}`, {
+      const response = await fetch(`https://panchayat-system.onrender.com/api/government-officials/${id}`, {
         method: 'DELETE',
         headers: {
           'X-Is-Admin': user?.isAdmin ? 'true' : 'false'
