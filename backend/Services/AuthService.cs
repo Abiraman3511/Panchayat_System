@@ -7,7 +7,7 @@ namespace PanchayatApp.Services
 {
     public interface IAuthService
     {
-        Task<bool> SendOtpAsync(string email);
+        Task<string> SendOtpAsync(string email);
         Task<bool> RegisterWithOtpAsync(RegisterRequest request);
         Task<User?> LoginAsync(LoginRequest request);
         Task<User?> AdminLoginAsync(LoginRequest request);
@@ -26,13 +26,16 @@ namespace PanchayatApp.Services
             _emailService = emailService;
         }
 
-        public async Task<bool> SendOtpAsync(string email)
+        public async Task<string> SendOtpAsync(string email)
         {
             var otp = new Random().Next(100000, 999999).ToString();
             _cache.Set($"OTP_{email}", otp, TimeSpan.FromMinutes(10));
             var message = $"Your registration OTP for Panchayat System is: {otp}. It is valid for 10 minutes.";
-            await _emailService.SendEmailAsync(email, "Panchayat System Registration OTP", message);
-            return true;
+            
+            // Bypass email sending to prevent Render Free Tier crash
+            // await _emailService.SendEmailAsync(email, "Panchayat System Registration OTP", message);
+            
+            return otp;
         }
 
         public async Task<bool> RegisterWithOtpAsync(RegisterRequest request)
