@@ -27,9 +27,19 @@ namespace PanchayatApp
                 });
             });
 
-            // Configure EF Core with SQLite
+            // Configure EF Core (PostgreSQL for Prod, SQLite for Local)
+            var pgConnection = Configuration.GetConnectionString("PostgreSQLConnection");
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=PanchayatSystem.db"));
+            {
+                if (!string.IsNullOrEmpty(pgConnection))
+                {
+                    options.UseNpgsql(pgConnection);
+                }
+                else
+                {
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=PanchayatSystem.db");
+                }
+            });
 
             // Add Memory Cache
             services.AddMemoryCache();

@@ -21,6 +21,16 @@ namespace PanchayatApp.Data
                     Console.WriteLine("✓ Admin users seeded successfully.");
                 }
 
+                // Seed Default User
+                if (!appDb.Users.Any(u => u.Username == "user1"))
+                {
+                    appDb.Users.Add(
+                        new User { Username = "user1", HashedPassword = BCrypt.Net.BCrypt.HashPassword("user123"), IsAdmin = false }
+                    );
+                    appDb.SaveChanges();
+                    Console.WriteLine("✓ Default user (user1) seeded successfully.");
+                }
+
                 // Seed Village Officials
                 if (!appDb.VillageOfficials.Any())
                 {
