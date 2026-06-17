@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./Login.css";
 import loginImage from "../assets/login-image.png";
 
-const API_URL = import.meta.env.DEV ? "http://localhost:5000" : "https://panchayat-system.onrender.com";
+const API_URL = import.meta.env.DEV ? "http://localhost:8080" : "https://panchayat-system.onrender.com";
 
 
 export default function Login({ onLoginSuccess }) {
@@ -12,63 +12,31 @@ export default function Login({ onLoginSuccess }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  
+
   const [isRegistering, setIsRegistering] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  
+
   const [dialog, setDialog] = useState({ isOpen: false, message: "", type: "info" });
 
   const showDialog = (message, type = "info") => {
     setDialog({ isOpen: true, message, type });
   };
 
-  const handleSendOtp = async () => {
-    if (!email || !phone || !username || !password || !confirmPassword) {
-      showDialog("Please fill in all fields before requesting OTP.", "error");
-      return;
-    }
-    if (password !== confirmPassword) {
-      showDialog("Passwords do not match!", "error");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        showDialog(data.message || data.detail || "Failed to send OTP.", "error");
-      } else {
-        showDialog(`OTP sent successfully! For testing, your code is: ${data.otp}`, "success");
-        setOtpSent(true);
-      }
-    } catch (error) {
-      console.error(error);
-      showDialog("Unable to reach backend.", "error");
-    }
-    setLoading(false);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isRegistering && !otpSent) {
-      await handleSendOtp();
-      return;
+    if (isRegistering) {
+      if (password !== confirmPassword) {
+        showDialog("Passwords do not match!", "error");
+        return;
+      }
     }
 
     setLoading(true);
     try {
-      const endpoint = isRegistering ? "/api/auth/verify-otp" : "/api/auth/login";
-      const payload = isRegistering 
-        ? { username, password, confirmPassword, email, phoneNumber: phone, otpCode: otp } 
+      const endpoint = isRegistering ? "/api/auth/register" : "/api/auth/login";
+      const payload = isRegistering
+        ? { username, password, confirmPassword, email, phoneNumber: phone }
         : { username, password };
 
       const response = await fetch(`${API_URL}${endpoint}`, {
@@ -76,7 +44,7 @@ export default function Login({ onLoginSuccess }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      
+
       const data = await response.json();
       if (!response.ok) {
         showDialog(data.message || data.detail || "Request Failed.", "error");
@@ -87,18 +55,16 @@ export default function Login({ onLoginSuccess }) {
       if (isRegistering) {
         showDialog("Registration successful! Now login.", "success");
         setIsRegistering(false);
-        setOtpSent(false);
         setUsername("");
         setPassword("");
         setConfirmPassword("");
         setEmail("");
         setPhone("");
-        setOtp("");
       } else {
         // Universal login endpoint returns isAdmin flag automatically
-        onLoginSuccess({ 
-          username, 
-          token: data.token, 
+        onLoginSuccess({
+          username,
+          token: data.token,
           isAdmin: data.isAdmin,
           email: data.user?.email || "",
           phoneNumber: data.user?.phoneNumber || ""
@@ -144,7 +110,7 @@ export default function Login({ onLoginSuccess }) {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="For OTP verification"
+                      placeholder="Enter your email"
                       required
                     />
                   </div>
@@ -186,38 +152,25 @@ export default function Login({ onLoginSuccess }) {
                       required
                     />
                   </div>
-                  
-                  {otpSent && (
-                    <div className="form-group otp-group">
-                      <label>Enter OTP from Email</label>
-                      <input
-                        type="text"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                        placeholder="6-digit code"
-                        required
-                      />
-                    </div>
-                  )}
+
                 </>
               )}
 
               <button type="submit" disabled={loading}>
-                {loading 
-                  ? "Processing..." 
-                  : isRegistering 
-                    ? (otpSent ? "Verify & Register" : "Send OTP") 
+                {loading
+                  ? "Processing..."
+                  : isRegistering
+                    ? "Register"
                     : "Login"}
               </button>
             </form>
 
             <p className="toggle-auth" style={{ marginTop: "20px", fontSize: "0.95rem", color: "var(--text-muted)" }}>
               {isRegistering ? "Already have an account? " : "Don't have an account? "}
-              <span 
+              <span
                 style={{ color: "var(--primary)", cursor: "pointer", textDecoration: "underline", fontWeight: "bold" }}
                 onClick={() => {
                   setIsRegistering(!isRegistering);
-                  setOtpSent(false);
                 }}
               >
                 {isRegistering ? "Login here" : "Register here"}
@@ -244,7 +197,7 @@ export default function Login({ onLoginSuccess }) {
             <h3 style={{ color: "var(--secondary)", marginBottom: "25px", fontSize: "1.1rem", fontWeight: "600", lineHeight: "1.4" }}>
               {dialog.message}
             </h3>
-            <button 
+            <button
               onClick={() => setDialog({ ...dialog, isOpen: false })}
               style={{
                 background: dialog.type === 'error' ? 'var(--danger)' : 'var(--primary)',

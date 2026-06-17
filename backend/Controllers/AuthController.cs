@@ -15,20 +15,12 @@ namespace PanchayatApp.Controllers
             _authService = authService;
         }
 
-        [HttpPost("send-otp")]
-        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest request)
-        {
-            var otp = await _authService.SendOtpAsync(request.Email);
-            if (!string.IsNullOrEmpty(otp)) return Ok(new { message = "OTP generated.", otp = otp });
-            return StatusCode(500, new { message = "Failed to generate OTP." });
-        }
-
-        [HttpPost("verify-otp")] // Replacing old '/register' for unified routing
-        public async Task<IActionResult> VerifyOtp([FromBody] RegisterRequest request)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             try
             {
-                var success = await _authService.RegisterWithOtpAsync(request);
+                var success = await _authService.RegisterAsync(request);
                 if (success) return Ok(new { message = "Registration successful." });
                 return BadRequest(new { message = "Username already exists." });
             }
